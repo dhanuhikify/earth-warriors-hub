@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Calendar, Users, Award, Clock } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 interface ChallengeCardProps {
   title: string;
@@ -27,10 +29,29 @@ const ChallengeCard = ({
   category,
   image 
 }: ChallengeCardProps) => {
+  const navigate = useNavigate();
   const difficultyColors = {
     beginner: "bg-green-100 text-green-800",
     intermediate: "bg-yellow-100 text-yellow-800", 
     advanced: "bg-red-100 text-red-800"
+  };
+
+  const handleChallengeClick = () => {
+    // Map challenge titles to course IDs
+    const courseMapping: { [key: string]: string } = {
+      "Plant 50 Trees Challenge": "tree-planting",
+      "Waste Segregation Master": "waste-sorting",
+      "Water Conservation Hero": "water-conservation"
+    };
+
+    const courseId = courseMapping[title];
+    if (courseId) {
+      navigate(`/course/${courseId}`);
+    } else {
+      toast.info("Challenge video coming soon!", {
+        description: "This challenge will have an educational video component soon."
+      });
+    }
   };
 
   return (
@@ -91,6 +112,7 @@ const ChallengeCard = ({
         <Button 
           variant={progress > 0 ? "default" : "hero"} 
           className="w-full"
+          onClick={handleChallengeClick}
         >
           {progress > 0 ? "Continue Challenge" : "Join Challenge"}
         </Button>

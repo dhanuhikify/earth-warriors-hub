@@ -13,13 +13,16 @@ import {
   TrendingUp,
   Award,
   Calendar,
-  BookOpen
+  BookOpen,
+  ArrowLeft
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import treePlantingImage from "@/assets/challenge-tree-planting.jpg";
 import wasteSortingImage from "@/assets/challenge-waste-sorting.jpg";
 import waterConservationImage from "@/assets/challenge-water-conservation.jpg";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const challenges = [
     {
       title: "Plant 50 Trees Challenge",
@@ -67,6 +70,15 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-gradient-subtle">
       <div className="container mx-auto px-4 py-8 space-y-8">
+        {/* Back Button */}
+        <Button 
+          variant="ghost" 
+          onClick={() => navigate('/')}
+          className="mb-6"
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Back to Home
+        </Button>
         {/* Welcome Section */}
         <div className="text-center space-y-4">
           <h1 className="text-4xl font-bold text-foreground">
@@ -140,19 +152,35 @@ const Dashboard = () => {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <Button variant="eco" className="h-20 flex-col">
+                  <Button 
+                    variant="eco" 
+                    className="h-20 flex-col"
+                    onClick={() => navigate('/course/forest-ecosystems')}
+                  >
                     <TreePine className="h-6 w-6 mb-2" />
                     Forest Ecosystems
                   </Button>
-                  <Button variant="eco" className="h-20 flex-col">
+                  <Button 
+                    variant="eco" 
+                    className="h-20 flex-col"
+                    onClick={() => navigate('/course/recycling-basics')}
+                  >
                     <Recycle className="h-6 w-6 mb-2" />
                     Recycling Basics
                   </Button>
-                  <Button variant="eco" className="h-20 flex-col">
+                  <Button 
+                    variant="eco" 
+                    className="h-20 flex-col"
+                    onClick={() => navigate('/course/water-cycle')}
+                  >
                     <Droplets className="h-6 w-6 mb-2" />
                     Water Cycle
                   </Button>
-                  <Button variant="eco" className="h-20 flex-col">
+                  <Button 
+                    variant="eco" 
+                    className="h-20 flex-col"
+                    onClick={() => navigate('/course/carbon-footprint')}
+                  >
                     <Target className="h-6 w-6 mb-2" />
                     Carbon Footprint
                   </Button>
