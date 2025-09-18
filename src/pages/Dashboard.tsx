@@ -1,6 +1,8 @@
+import { useState, useEffect } from "react";
 import EcoStatsCard from "@/components/EcoStatsCard";
 import ChallengeCard from "@/components/ChallengeCard";
 import LeaderboardCard from "@/components/LeaderboardCard";
+import AssignmentCard from "@/components/AssignmentCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -24,8 +26,77 @@ import treePlantingImage from "@/assets/challenge-tree-planting.jpg";
 import wasteSortingImage from "@/assets/challenge-waste-sorting.jpg";
 import waterConservationImage from "@/assets/challenge-water-conservation.jpg";
 
+interface Assignment {
+  id: string;
+  title: string;
+  description: string;
+  due_date: string | null;
+  created_at: string;
+}
+
+interface AssignmentSubmission {
+  id: string;
+  assignment_id: string;
+  submission_text: string;
+  submitted_at: string;
+  grade: number | null;
+  feedback: string | null;
+}
+
 const Dashboard = () => {
   const navigate = useNavigate();
+  const [assignments, setAssignments] = useState<Assignment[]>([]);
+  const [submissions, setSubmissions] = useState<AssignmentSubmission[]>([]);
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    checkAuthAndLoadData();
+  }, []);
+
+  const checkAuthAndLoadData = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    if (!session?.user) {
+      navigate('/auth');
+      return;
+    }
+
+    setUser(session.user);
+
+    // Check if user is a student to load assignments
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('user_id', session.user.id)
+      .single();
+
+    if (profile?.role === 'student') {
+      loadAssignments(session.user.id);
+    }
+  };
+
+  const loadAssignments = async (userId: string) => {
+    // Load all assignments
+    const { data: assignmentsData } = await supabase
+      .from('assignments')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    // Load user's submissions
+    const { data: submissionsData } = await supabase
+      .from('assignment_submissions')
+      .select('*')
+      .eq('student_id', userId);
+
+    setAssignments(assignmentsData || []);
+    setSubmissions(submissionsData || []);
+  };
+
+  const handleSubmissionUpdate = () => {
+    if (user) {
+      loadAssignments(user.id);
+    }
+  };
   const { toast } = useToast();
 
   const handleLogout = async () => {

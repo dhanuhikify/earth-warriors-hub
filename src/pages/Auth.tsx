@@ -25,6 +25,20 @@ const Auth = () => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
 
+  const checkUserRoleAndRedirect = async (user: User) => {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('user_id', user.id)
+      .single();
+    
+    if (profile?.role === 'teacher') {
+      navigate('/teacher');
+    } else {
+      navigate('/dashboard');
+    }
+  };
+
   useEffect(() => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -33,7 +47,10 @@ const Auth = () => {
         setUser(session?.user ?? null);
         
         if (session?.user) {
-          navigate('/dashboard');
+          // Check user role and redirect appropriately
+          setTimeout(() => {
+            checkUserRoleAndRedirect(session.user);
+          }, 100);
         }
       }
     );
@@ -44,7 +61,7 @@ const Auth = () => {
       setUser(session?.user ?? null);
       
       if (session?.user) {
-        navigate('/dashboard');
+        checkUserRoleAndRedirect(session.user);
       }
     });
 

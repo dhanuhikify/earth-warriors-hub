@@ -14,6 +14,77 @@ export type Database = {
   }
   public: {
     Tables: {
+      assignment_submissions: {
+        Row: {
+          assignment_id: string
+          feedback: string | null
+          grade: number | null
+          id: string
+          student_id: string
+          submission_file_url: string | null
+          submission_text: string | null
+          submitted_at: string
+        }
+        Insert: {
+          assignment_id: string
+          feedback?: string | null
+          grade?: number | null
+          id?: string
+          student_id: string
+          submission_file_url?: string | null
+          submission_text?: string | null
+          submitted_at?: string
+        }
+        Update: {
+          assignment_id?: string
+          feedback?: string | null
+          grade?: number | null
+          id?: string
+          student_id?: string
+          submission_file_url?: string | null
+          submission_text?: string | null
+          submitted_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assignment_submissions_assignment_id_fkey"
+            columns: ["assignment_id"]
+            isOneToOne: false
+            referencedRelation: "assignments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assignments: {
+        Row: {
+          created_at: string
+          description: string | null
+          due_date: string | null
+          id: string
+          teacher_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          teacher_id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          teacher_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
