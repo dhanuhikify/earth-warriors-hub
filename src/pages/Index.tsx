@@ -135,7 +135,7 @@ const Index = () => {
             <Button 
               variant="hero" 
               size="lg" 
-              onClick={() => navigate('/dashboard')}
+              onClick={() => navigate('/auth')}
               className="bg-white text-primary hover:bg-white/90"
             >
               <Leaf className="h-5 w-5 mr-2" />

@@ -1,4 +1,9 @@
-import { useParams } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { ArrowLeft, Play, BookOpen, Award, CheckCircle } from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
 import VideoPlayer from "@/components/VideoPlayer";
 import { toast } from "sonner";
 

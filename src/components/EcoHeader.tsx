@@ -32,8 +32,8 @@ const EcoHeader = () => {
             <Target className="h-3 w-3" />
             1,250 Eco Points
           </Badge>
-          <Button variant="hero" size="sm">
-            Join Challenge
+          <Button variant="hero" size="sm" onClick={() => window.location.href = '/auth'}>
+            Login / Sign Up
           </Button>
         </div>
       </div>
