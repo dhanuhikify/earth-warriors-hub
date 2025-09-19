@@ -33,7 +33,9 @@ const Auth = () => {
       .single();
     
     if (profile?.role === 'teacher') {
-      navigate('/teacher');
+      navigate('/teacher-dashboard');
+    } else if (profile?.role === 'ngo') {
+      navigate('/ngo-dashboard');
     } else {
       navigate('/dashboard');
     }

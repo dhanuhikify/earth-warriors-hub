@@ -3,6 +3,7 @@ import EcoStatsCard from "@/components/EcoStatsCard";
 import ChallengeCard from "@/components/ChallengeCard";
 import LeaderboardCard from "@/components/LeaderboardCard";
 import AssignmentCard from "@/components/AssignmentCard";
+import NotificationCard from "@/components/NotificationCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -46,11 +47,13 @@ interface AssignmentSubmission {
 const Dashboard = () => {
   const navigate = useNavigate();
   const [assignments, setAssignments] = useState<Assignment[]>([]);
+  const [notifications, setNotifications] = useState<any[]>([]);
   const [submissions, setSubmissions] = useState<AssignmentSubmission[]>([]);
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     checkAuthAndLoadData();
+    fetchNotifications();
   }, []);
 
   const checkAuthAndLoadData = async () => {
@@ -90,6 +93,17 @@ const Dashboard = () => {
 
     setAssignments(assignmentsData || []);
     setSubmissions(submissionsData || []);
+  };
+
+  const fetchNotifications = async () => {
+    const { data, error } = await supabase
+      .from('notifications')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (!error && data) {
+      setNotifications(data);
+    }
   };
 
   const handleSubmissionUpdate = () => {
@@ -232,6 +246,26 @@ const Dashboard = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Active Challenges */}
           <div className="lg:col-span-2 space-y-6">
+            {/* Notifications Section */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Recent Announcements</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4 max-h-60 overflow-y-auto">
+                  {notifications.length === 0 ? (
+                    <p className="text-muted-foreground text-center py-4">
+                      No announcements available
+                    </p>
+                  ) : (
+                    notifications.slice(0, 3).map((notification) => (
+                      <NotificationCard key={notification.id} notification={notification} />
+                    ))
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+            
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-bold text-foreground">Active Challenges</h2>
               <Button variant="outline">
